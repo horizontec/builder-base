@@ -1,3 +1,5 @@
+FROM jenkinsxio/builder-base:latest
+
 # USER jenkins
 WORKDIR /home/jenkins
 
@@ -14,6 +16,11 @@ RUN curl -f https://storage.googleapis.com/kubernetes-helm/helm-v${HELM_VERSION}
   mv linux-amd64/tiller /usr/bin/ && \
   rm -rf linux-amd64
 
+#helm-secrets
+#ENV HELM_SECRETS
+RUN mkdir -p ~/.helm/plugins
+RUN helm plugin install https://github.com/futuresimple/helm-secrets
+
 # helm3
 # RUN curl -L https://storage.googleapis.com/kubernetes-helm/helm-dev-v3-linux-amd64.tar.gz | tar xzv && \
 #  mv linux-amd64/helm /usr/bin/helm3 && \
@@ -27,9 +34,9 @@ RUN curl -f -L https://github.com/jstrachan/helm/releases/download/untagged-9337
   mv helm /usr/bin/helm3
 
 # gcloud
-ENV GCLOUD_VERSION 187.0.0
-RUN curl -f -L https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/google-cloud-sdk-${GCLOUD_VERSION}-linux-x86_64.tar.gz | tar xzv && \
-  mv google-cloud-sdk /usr/bin/
+#ENV GCLOUD_VERSION 187.0.0
+#RUN curl -f -L https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/google-cloud-sdk-${GCLOUD_VERSION}-linux-x86_64.tar.gz | tar xzv && \
+#  mv google-cloud-sdk /usr/bin/
 ENV PATH=$PATH:/usr/bin/google-cloud-sdk/bin
 
 # install the docker credential plugin
